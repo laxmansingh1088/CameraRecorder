@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:dist="http://schemas.android.com/apk/distribution"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.example.camerarecorder">
+
+
+    <!-- Permission declarations -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="28" />
+
+    <!-- A camera with burst capability is required to use this application -->
+    <uses-feature android:name="android.hardware.camera.any" />
+
+    <application
+        android:name=".MainApplication"
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        tools:targetApi="31">
+
+        <activity
+            android:name=".MainActivity"
+            android:clearTaskOnLaunch="true"
+            android:exported="true"
+            android:theme="@style/AppTheme">
+
+            <!-- Main app intent filter -->
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+        </activity>
+
+        <service
+            android:name="com.example.servicess.MyCamVideoRecorderService"
+            android:enabled="true"
+            android:excludeFromRecents="true"
+            android:exported="false"
+            android:stopWithTask="false" />
+
+
+        <receiver
+            android:name=".broadcasts.NotificationReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="ACTION_START" />
+                <action android:name="ACTION_STOP" />
+                <action android:name="ACTION_RESUME" />
+            </intent-filter>
+
+        </receiver>
+
+
+        <!-- FileProvider used to share media with other apps -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
+    </application>
+
+
+    <!--
+        <service android:name=".BackgroundVideoRecorder"/>
+
+        You need few permissions also,to record a video & save it to sd card:
+
+        <uses-permission android:name="android.permission.CAMERA"/>
+        <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+        <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+        <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+        <uses-permission android:name="android.permission.RECORD_VIDEO"/>-->
+
+</manifest>
